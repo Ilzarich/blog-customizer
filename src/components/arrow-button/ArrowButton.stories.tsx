@@ -13,7 +13,12 @@ export const ArrowButtonStory: Story = {
 	render: () => {
 		return (
 			<>
-				<ArrowButton />
+				<ArrowButton
+					state={false}
+					openForm={function (): void {
+						throw new Error('Function not implemented.');
+					}}
+				/>
 			</>
 		);
 	},
