@@ -121,7 +121,7 @@ export const ArticleParamsForm = ({
 						onChange={handlerBackgroundColor}
 					/>
 					<Select
-						title='Ширина конетна'
+						title='Ширина конет'
 						options={contentWidthArr}
 						selected={state.contentWidth}
 						onChange={handlerContentWidth}
