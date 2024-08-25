@@ -38,6 +38,11 @@ export const ArticleParamsForm = ({
 	function openForm() {
 		setForm(!form);
 	}
+
+	function closeForm() {
+		setForm(false);
+	}
+
 	useEffect(() => {
 		function closeFormEsc(event: KeyboardEvent) {
 			if (event.code === 'Escape') setForm(false);
@@ -45,7 +50,13 @@ export const ArticleParamsForm = ({
 
 		document.addEventListener('keydown', closeFormEsc);
 		return () => document.removeEventListener('keydown', closeFormEsc);
-	}, [form]);
+	}, []);
+
+	function closeFormOverlay(event: React.MouseEvent<HTMLDivElement>) {
+		if (event.target === event.currentTarget) {
+			closeForm();
+		}
+	}
 
 	function handlerFontFamaly(item: OptionType) {
 		setState({ ...state, fontFamilyOption: item });
@@ -81,58 +92,64 @@ export const ArticleParamsForm = ({
 		<>
 			<ArrowButton state={form} openForm={openForm} />
 
-			<aside
-				className={clsx(styles.container, { [styles.container_open]: form })}
-				ref={formRef}>
-				<form
-					className={styles.form}
-					onSubmit={handleSubmit}
-					onReset={handleReset}>
-					<Text as='h2' size={31} weight={800} uppercase={true}>
-						Задайте параметры
-					</Text>
-					<Select
-						title='Шрифт'
-						options={fontFamilyOptions}
-						selected={state.fontFamilyOption}
-						onChange={handlerFontFamaly}
-					/>
-					<RadioGroup
-						name='font size'
-						title='размер шрифта'
-						options={fontSizeOptions}
-						selected={state.fontSizeOption}
-						onChange={handlerFontSize}
-					/>
+			{form && (
+				<div className={styles.overlay} onClick={closeFormOverlay}>
+					<aside
+						className={clsx(styles.container, {
+							[styles.container_open]: form,
+						})}
+						ref={formRef}>
+						<form
+							className={styles.form}
+							onSubmit={handleSubmit}
+							onReset={handleReset}>
+							<Text as='h2' size={31} weight={800} uppercase={true}>
+								Задайте параметры
+							</Text>
+							<Select
+								title='Шрифт'
+								options={fontFamilyOptions}
+								selected={state.fontFamilyOption}
+								onChange={handlerFontFamaly}
+							/>
+							<RadioGroup
+								name='font size'
+								title='размер шрифта'
+								options={fontSizeOptions}
+								selected={state.fontSizeOption}
+								onChange={handlerFontSize}
+							/>
 
-					<Select
-						title='Цвет шрифта'
-						options={fontColors}
-						selected={state.fontColor}
-						onChange={handlerFontColor}
-					/>
+							<Select
+								title='Цвет шрифта'
+								options={fontColors}
+								selected={state.fontColor}
+								onChange={handlerFontColor}
+							/>
 
-					<Separator />
+							<Separator />
 
-					<Select
-						title='Цвет фона'
-						options={backgroundColors}
-						selected={state.backgroundColor}
-						onChange={handlerBackgroundColor}
-					/>
-					<Select
-						title='Ширина конетна'
-						options={contentWidthArr}
-						selected={state.contentWidth}
-						onChange={handlerContentWidth}
-					/>
+							<Select
+								title='Цвет фона'
+								options={backgroundColors}
+								selected={state.backgroundColor}
+								onChange={handlerBackgroundColor}
+							/>
+							<Select
+								title='Ширина контента'
+								options={contentWidthArr}
+								selected={state.contentWidth}
+								onChange={handlerContentWidth}
+							/>
 
-					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' />
-						<Button title='Применить' type='submit' />
-					</div>
-				</form>
-			</aside>
+							<div className={styles.bottomContainer}>
+								<Button title='Сбросить' type='reset' />
+								<Button title='Применить' type='submit' />
+							</div>
+						</form>
+					</aside>
+				</div>
+			)}
 		</>
 	);
 };
